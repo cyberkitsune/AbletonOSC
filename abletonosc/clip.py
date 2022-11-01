@@ -33,7 +33,8 @@ class ClipHandler(AbletonOSCHandler):
             "is_midi_clip",
             "is_audio_clip",
             "is_playing",
-            "is_recording"
+            "is_recording",
+            "is_triggered"
         ]
         properties_rw = [
             "color",
@@ -74,3 +75,13 @@ class ClipHandler(AbletonOSCHandler):
             notes = clip.get_notes(0, 0, clip.length, 127)
             return (item for sublist in notes for item in sublist)
         self.osc_server.add_handler("/live/clip/get/notes", create_clip_callback(clip_get_notes))
+
+        def clips_get_clips(params: Tuple[Any] = ()):
+            clipset = ()
+            for tidx, track in enumerate(self.song.tracks):
+                for cidx, clip in enumerate(track.clip_slots):
+                    clipset += (f"{tidx}.{cidx}", )
+
+            return clipset
+        self.osc_server.add_handler("/live/clip/clips", clips_get_clips)
+
