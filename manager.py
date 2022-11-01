@@ -1,6 +1,7 @@
 from ableton.v2.control_surface import ControlSurface
 
 from . import abletonosc
+from pathlib import Path
 
 import importlib
 import traceback
@@ -17,7 +18,9 @@ else:
     # On Windows, put logs in c:\temp
     tmp_dir = "c:\\temp"
 
-log_path = os.path.join(tmp_dir, "abletonosc.log")
+log_path = os.path.join(Path.home(), "AbletonOSC", "abletonosc.log")
+if not os.path.exists(log_path):
+    os.makedirs(os.path.dirname(log_path))
 file_handler = logging.FileHandler(log_path)
 file_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('(%(asctime)s) [%(levelname)s] %(message)s')
