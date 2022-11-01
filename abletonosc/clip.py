@@ -16,7 +16,9 @@ class ClipHandler(AbletonOSCHandler):
                 track_index, clip_index = params[:2]
                 track = self.song.tracks[track_index]
                 clip = track.clip_slots[clip_index].clip
-                return func(clip, *args, params[2:])
+                if clip is None:
+                    return "No clip", track_index, clip_index
+                return (func(clip, *args, params[2:]) + (track_index, clip_index))
 
             return clip_callback
 
